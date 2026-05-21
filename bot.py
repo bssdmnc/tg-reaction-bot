@@ -9,7 +9,7 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 # Загрузка переменных окружения
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
 
 # --- КОНФИГУРАЦИЯ ---
 API_TOKEN = os.getenv('API_TOKEN')
