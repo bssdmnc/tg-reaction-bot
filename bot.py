@@ -9,15 +9,10 @@ from aiogram import Bot, Dispatcher, types, F
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 # Загрузка переменных окружения
-load_dotenv(dotenv_path=os.path.join(os.path.dirname(__file__), '.env'))
-
-# --- КОНФИГУРАЦИЯ ---
 API_TOKEN = os.getenv('API_TOKEN')
-CHANNEL_ID = int(os.getenv('CHANNEL_ID'))
-
-def post_link(message_id):
-    cid = str(CHANNEL_ID).lstrip('-').removeprefix('100')
-    return f"https://t.me/c/{cid}/{message_id}"
+CHANNEL_ID = int(os.getenv('CHANNEL_ID', 0))
+WEBHOOK_URL = os.getenv('WEBHOOK_URL')
+PORT = int(os.getenv('PORT', 8080))
 
 logging.basicConfig(
     level=logging.INFO,
