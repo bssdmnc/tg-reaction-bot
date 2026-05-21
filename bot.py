@@ -157,28 +157,13 @@ async def handle_reaction(callback: types.CallbackQuery):
         await callback.answer("Что-то пошло не так...")
 
 
-# --- WEBHOOK MAIN ---
-WEBHOOK_PATH = "/webhook"
-WEBHOOK_URL = os.getenv("WEBHOOK_URL")  # Укажите полный URL для webhook
-
-async def on_startup(dispatcher):
+# --- POLLING MAIN ---
+async def main():
     init_db()
-    await bot.set_webhook(WEBHOOK_URL + WEBHOOK_PATH)
-    logging.info("Webhook установлен.")
-
-async def on_shutdown(dispatcher):
-    await bot.delete_webhook()
-    logging.info("Webhook удалён.")
-
-def setup_webhook_app():
-    app = web.Application()
-    SimpleRequestHandler(dispatcher=dp, bot=bot).register(app, path=WEBHOOK_PATH)
-    app.on_startup.append(lambda app: on_startup(dp))
-    app.on_shutdown.append(lambda app: on_shutdown(dp))
-    return app
-
-# Делаем app доступным для WSGI
-app = setup_webhook_app()
+    try:
+        await dp.start_polling(bot)
+    finally:
+        await bot.session.close()
 
 if __name__ == '__main__':
-    web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
+    asyncio.run(main())
