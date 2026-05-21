@@ -177,6 +177,8 @@ def setup_webhook_app():
     app.on_shutdown.append(lambda app: on_shutdown(dp))
     return app
 
+# Делаем app доступным для WSGI
+app = setup_webhook_app()
+
 if __name__ == '__main__':
-    app = setup_webhook_app()
     web.run_app(app, host="0.0.0.0", port=int(os.getenv("PORT", 8080)))
